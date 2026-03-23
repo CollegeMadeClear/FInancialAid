@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>College Application Tracker — College Made Clear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple-dark:   #4A3F63;
+    --purple:        #6B5B8B;
+    --purple-tint:   #EDE9F4;
+    --green:         #2E7D6B;
+    --green-tint:    #E8F4F0;
+    --amber:         #B05C00;
+    --amber-tint:    #FFF8E1;
+    --orange:        #E65100;
+    --orange-tint:   #FFF3E0;
+    --white:         #FFFFFF;
+    --grey-dark:     #3A3A3A;
+    --grey-mid:      #777777;
+    --page-bg:       #F4F2F8;
+    --border:        #E4E0F0;
+
+    --high-reach-bg:   #F8D7DA;
+    --high-reach-text: #C62828;
+    --reach-bg:        #FFF3E0;
+    --reach-text:      #E65100;
+    --target-bg:       #FFF8E1;
+    --target-text:     #B05C00;
+    --likely-bg:       #E8F4F0;
+    --likely-text:     #2E7D6B;
+    --high-likely-bg:  #D4EDDA;
+    --high-likely-text:#1B5E20;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--page-bg);
+    color: var(--grey-dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--purple-dark);
+    color: white;
+    padding: 72px 24px 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 50%, rgba(107,91,139,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 30%, rgba(46,125,107,0.2) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 6vw, 64px);
+    line-height: 1.1;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: #C8B8E8;
+  }
+  .hero-sub {
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.8);
+    max-width: 560px;
+    margin: 0 auto 36px;
+    position: relative;
+  }
+  .hero-cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .btn-primary {
+    background: white;
+    color: var(--purple-dark);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 2px solid rgba(255,255,255,0.35);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-secondary:hover {
+    border-color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.08);
+  }
+  .btn-disabled {
+    opacity: 0.55;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* ── SECTION WRAPPER ── */
+  .section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 64px 24px;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 10px;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    color: var(--purple-dark);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .section-body {
+    font-size: 16px;
+    color: var(--grey-mid);
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+
+  /* ── DEMO SECTION ── */
+  .demo-wrap {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 32px rgba(74,63,99,0.10);
+  }
+  .demo-header {
+    background: var(--purple-dark);
+    color: white;
+    padding: 14px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .demo-header .dots {
+    display: flex;
+    gap: 5px;
+  }
+  .demo-header .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+  }
+  .demo-header .dot.red   { background: #FF5F57; }
+  .demo-header .dot.yellow{ background: #FFBD2E; }
+  .demo-header .dot.green { background: #28C840; }
+
+  /* Search bar */
+  .demo-search-row {
+    padding: 20px 20px 0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .demo-search-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--purple-dark);
+    white-space: nowrap;
+  }
+  .demo-input-wrap {
+    position: relative;
+    flex: 1;
+    max-width: 420px;
+  }
+  .demo-input {
+    width: 100%;
+    padding: 10px 14px 10px 36px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--purple-dark);
+    background: var(--purple-tint);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .demo-input:focus { border-color: var(--purple); }
+  .demo-input::placeholder { color: var(--grey-mid); font-style: italic; }
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--purple);
+    font-size: 14px;
+    pointer-events: none;
+  }
+  .demo-result-msg {
+    padding: 8px 20px 0;
+    font-size: 12px;
+    min-height: 26px;
+    font-style: italic;
+  }
+  .msg-found   { color: var(--green); }
+  .msg-suggest { color: var(--amber); }
+  .msg-none    { color: var(--orange); }
+
+  /* Spreadsheet table */
+  .demo-table-wrap {
+    overflow-x: auto;
+    padding: 16px 0 0;
+  }
+  table.demo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .demo-table th {
+    background: var(--purple);
+    color: white;
+    padding: 8px 10px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .demo-table th.col-name { background: var(--purple-dark); text-align: left; }
+  .demo-table .section-row td {
+    background: var(--purple-dark);
+    color: rgba(255,255,255,0.7);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+  }
+  .demo-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    color: var(--grey-mid);
+    font-style: italic;
+    white-space: nowrap;
+  }
+  .demo-table td.col-name {
+    text-align: left;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--purple-dark);
+    background: var(--purple-tint);
+    min-width: 180px;
+  }
+  .demo-table td.col-name.empty {
+    color: var(--grey-mid);
+    font-style: italic;
+    font-weight: 400;
+  }
+  .demo-table td.autofill {
+    background: #FAFAFA;
+    font-style: normal;
+    color: var(--grey-dark);
+    font-size: 11px;
+  }
+  .demo-table tr:nth-child(even) td { background: var(--page-bg); }
+  .demo-table tr:nth-child(even) td.autofill { background: #F0EEF6; }
+  .demo-table tr:nth-child(even) td.col-name { background: #E6E0F0; }
+
+  /* List type badges */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .badge-high-reach { background: var(--high-reach-bg); color: var(--high-reach-text); }
+  .badge-reach      { background: var(--reach-bg);      color: var(--reach-text); }
+  .badge-target     { background: var(--target-bg);     color: var(--target-text); }
+  .badge-likely     { background: var(--likely-bg);     color: var(--likely-text); }
+  .badge-high-likely{ background: var(--high-likely-bg);color: var(--high-likely-text); }
+
+  .demo-table td.level-cell { padding: 5px 8px; }
+
+  /* Input row highlight */
+  .input-row td.col-name {
+    background: var(--purple-tint) !important;
+  }
+
+  /* Demo footer note */
+  .demo-footer {
+    padding: 12px 20px;
+    font-size: 11px;
+    color: var(--grey-mid);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    background: var(--page-bg);
+  }
+
+  /* ── HOW IT WORKS ── */
+  .features-bg {
+    background: var(--purple-dark);
+    color: white;
+  }
+  .features-bg .section-label { color: rgba(255,255,255,0.5); }
+  .features-bg .section-title { color: white; }
+  .features-bg .section-body  { color: rgba(255,255,255,0.65); }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-top: 8px;
+  }
+  .feature-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .feature-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .feature-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: white;
+  }
+  .feature-card p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.6;
+  }
+
+  /* ── LIST LEVELS ── */
+  .levels-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .level-card {
+    border-radius: 10px;
+    padding: 18px 16px;
+    border: 1px solid var(--border);
+  }
+  .level-card .level-name {
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .level-card .level-desc {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--grey-dark);
+    opacity: 0.85;
+  }
+  .lc-hr { background: var(--high-reach-bg); }
+  .lc-hr .level-name { color: var(--high-reach-text); }
+  .lc-r  { background: var(--reach-bg); }
+  .lc-r  .level-name { color: var(--reach-text); }
+  .lc-t  { background: var(--target-bg); }
+  .lc-t  .level-name { color: var(--target-text); }
+  .lc-l  { background: var(--likely-bg); }
+  .lc-l  .level-name { color: var(--likely-text); }
+  .lc-hl { background: var(--high-likely-bg); }
+  .lc-hl .level-name { color: var(--high-likely-text); }
+
+  /* ── WHAT'S INCLUDED ── */
+  .included-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .included-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .included-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    color: var(--purple-dark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .included-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .included-card ul li {
+    font-size: 13px;
+    color: var(--grey-dark);
+    padding: 4px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+  .included-card ul li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  /* ── ABOUT ── */
+  .about-bg { background: white; }
+  .about-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 48px;
+    align-items: start;
+  }
+  @media (max-width: 640px) {
+    .about-inner { grid-template-columns: 1fr; }
+  }
+  .about-badge {
+    background: var(--purple-tint);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .about-badge .monogram {
+    width: 72px; height: 72px;
+    background: var(--purple-dark);
+    color: white;
+    border-radius: 50%;
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+  }
+  .about-badge .name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--purple-dark);
+    margin-bottom: 4px;
+  }
+  .about-badge .role {
+    font-size: 12px;
+    color: var(--grey-mid);
+    line-height: 1.5;
+  }
+  .about-content h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--purple-dark);
+    margin-bottom: 16px;
+  }
+  .about-content p {
+    font-size: 15px;
+    color: var(--grey-dark);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .cred-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .cred {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--grey-dark);
+  }
+  .cred-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--purple);
+    flex-shrink: 0;
+  }
+
+  /* ── VIDEO PLACEHOLDER ── */
+  .video-placeholder {
+    background: var(--purple-dark);
+    border-radius: 12px;
+    aspect-ratio: 16/9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    gap: 12px;
+    margin-top: 32px;
+    cursor: pointer;
+    border: 2px dashed rgba(255,255,255,0.2);
+    transition: border-color 0.2s;
+  }
+  .video-placeholder:hover { border-color: rgba(255,255,255,0.5); }
+  .play-btn {
+    width: 56px; height: 56px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .video-placeholder p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+  }
+
+  /* ── FINAL CTA ── */
+  .cta-section {
+    background: var(--purple-dark);
+    text-align: center;
+    padding: 72px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(107,91,139,0.5) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cta-section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    color: white;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .cta-section p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    max-width: 480px;
+    margin: 0 auto 32px;
+    position: relative;
+  }
+  .price-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-size: 13px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #2A2035;
+    color: rgba(255,255,255,0.45);
+    text-align: center;
+    padding: 28px 24px;
+    font-size: 12px;
+  }
+  footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  footer a:hover { color: white; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero > * { animation: fadeUp 0.6s ease both; }
+  .hero-eyebrow { animation-delay: 0.1s; }
+  .hero h1      { animation-delay: 0.2s; }
+  .hero-sub     { animation-delay: 0.3s; }
+  .hero-cta-row { animation-delay: 0.4s; }
+
+  /* Typing cursor */
+  .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 14px;
+    background: var(--purple);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink 0.9s step-end infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .demo-table th, .demo-table td { font-size: 10px; padding: 6px 7px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .levels-grid   { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <p class="hero-eyebrow">College Made Clear</p>
+  <h1>The College Application<br><em>Tracker That Thinks</em></h1>
+  <p class="hero-sub">Type "UCLA" or "Alabama Birmingham" — it knows what you mean. A Google Sheets tracker built for real families navigating the college search.</p>
+  <div class="hero-cta-row">
+    <a href="YOUR_ETSY_LINK_HERE" class="btn-primary">
+      ⬇ Get the Tracker on Etsy
+    </a>
+    <a href="#video" class="btn-secondary btn-disabled">
+      ▶ Watch the Walkthrough
+    </a>
+  </div>
+</section>
+
+<!-- ── LIVE DEMO ── -->
+<section class="section">
+  <p class="section-label">Try it yourself</p>
+  <h2 class="section-title">Type a college name below</h2>
+  <p class="section-body">The real tracker connects to federal data for 1,800+ schools. This demo uses 60 well-known schools to show you how the smart search works.</p>
+
+  <div class="demo-wrap">
+    <div class="demo-header">
+      <div class="dots">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      My College List — College Application Tracker
+    </div>
+
+    <div class="demo-search-row">
+      <span class="demo-search-label">Try typing:</span>
+      <div class="demo-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          class="demo-input"
+          id="demoInput"
+          placeholder="UCLA, Penn State, Alabama Birmingham..."
+          autocomplete="off"
+        >
+      </div>
+    </div>
+    <div class="demo-result-msg" id="resultMsg"></div>
+
+    <div class="demo-table-wrap">
+      <table class="demo-table">
+        <thead>
+          <tr>
+            <th class="col-name">College Name</th>
+            <th>List Level</th>
+            <th>State</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Setting</th>
+            <th>Accept %</th>
+            <th>In-State Tuition</th>
+            <th>OOS Tuition</th>
+            <th>Grad Rate</th>
+          </tr>
+        </thead>
+        <tbody id="demoTableBody">
+        </tbody>
+      </table>
+    </div>
+    <div class="demo-footer">
+      ↑ Blue cells = type here &nbsp;|&nbsp; Grey cells = auto-filled from federal data &nbsp;|&nbsp; The full tracker has 30 rows and connects to 1,800+ schools
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section class="features-bg">
+  <div class="section">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Built for how families actually search</h2>
+    <p class="section-body">No more hunting for official names or copy-pasting from college websites.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <h3>Smart name matching</h3>
+        <p>Type UCLA, BU, Penn State, or "Alabama Birmingham" — it finds the right school and fills in the official name automatically.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Auto-fills federal data</h3>
+        <p>State, control type, enrollment, setting, acceptance rate, tuition, and graduation rate populate automatically from federal College Scorecard data.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Live dashboard</h3>
+        <p>A built-in dashboard tracks your list balance, submission progress, and decision tally — updating automatically as you fill in your list.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✅</div>
+        <h3>No setup required</h3>
+        <p>Make a copy of the Google Sheet and start adding colleges. The smart search works immediately — no installation, no configuration, no API keys.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LIST LEVELS ── -->
+<section class="section">
+  <p class="section-label">The five-level system</p>
+  <h2 class="section-title">A smarter way to build your list</h2>
+  <p class="section-body">Most trackers use Reach / Match / Safety. This one uses five levels so you can see the real shape of your list — and where it needs work.</p>
+  <div class="levels-grid">
+    <div class="level-card lc-hr">
+      <div class="level-name">High Reach</div>
+      <div class="level-desc">Stats below typical range or &lt;15% acceptance. A genuine long shot.</div>
+    </div>
+    <div class="level-card lc-r">
+      <div class="level-name">Reach</div>
+      <div class="level-desc">At or below the middle 50%. You're a real candidate, but unpredictable.</div>
+    </div>
+    <div class="level-card lc-t">
+      <div class="level-name">Target</div>
+      <div class="level-desc">Solidly in the middle 50%. You're competitive. Build your list here.</div>
+    </div>
+    <div class="level-card lc-l">
+      <div class="level-name">Likely</div>
+      <div class="level-desc">Above the middle 50%. Strong candidate with good odds. Every list needs these.</div>
+    </div>
+    <div class="level-card lc-hl">
+      <div class="level-name">Highly Likely</div>
+      <div class="level-desc">Well above the typical profile. Your safety net — pick ones you'd love to attend.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHAT'S INCLUDED ── -->
+<section class="section" style="padding-top:0;">
+  <p class="section-label">What's in the tracker</p>
+  <h2 class="section-title">Four tabs. Everything you need.</h2>
+  <p class="section-body">One purchase, one Google Sheet, no subscriptions.</p>
+  <div class="included-grid">
+    <div class="included-card">
+      <h3>📋 My College List</h3>
+      <ul>
+        <li>30 rows for up to 30 schools</li>
+        <li>Smart college name search</li>
+        <li>Auto-filled federal data</li>
+        <li>Five-level list classification</li>
+        <li>App type, deadline, submission tracking</li>
+        <li>Decision status with color coding</li>
+        <li>Visit tracking and notes column</li>
+      </ul>
+    </div>
+    <div class="included-card">
+      <h3>📈 Dashboard</h3>
+      <ul>
+        <li>List balance at all five levels</li>
+        <li>Rolled-up Reach / Match / Likely totals</li>
+        <li>Submission progress counter</li>
+        <li>EA/ED application count</li>
+        <li>Decision tally — accepted, deferred, waitlisted, denied</li>
+        <li>Updates automatically as you work</li>
+      </ul>
+    </div>
+    <div class="included-card">
+      <h3>🗄 College Data</h3>
+      <ul>
+        <li>Pre-loaded with 1,800+ schools</li>
+        <li>Public and private nonprofit only</li>
+        <li>Bachelor's degree-granting only</li>
+        <li>Source: U.S. Dept. of Education</li>
+        <li>Updated annually each fall</li>
+      </ul>
+    </div>
+    <div class="included-card">
+      <h3>📖 Start Here Guide</h3>
+      <ul>
+        <li>How to enter college names</li>
+        <li>Five list level definitions</li>
+        <li>What every auto-filled column means</li>
+        <li>How to track applications</li>
+        <li>Dashboard explained</li>
+        <li>Data source and limitations</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ── VIDEO ── -->
+<section class="section" id="video" style="padding-top:0;">
+  <p class="section-label">See it in action</p>
+  <h2 class="section-title">Watch the full walkthrough</h2>
+  <p class="section-body">A complete video walkthrough of the tracker is coming soon on the College Made Clear YouTube channel.</p>
+  <div class="video-placeholder">
+    <div class="play-btn">▶</div>
+    <strong style="font-size:15px;">Walkthrough Video — Coming Soon</strong>
+    <p>Subscribe to College Made Clear on YouTube to be notified</p>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about-bg">
+  <div class="section">
+    <div class="about-inner">
+      <div>
+        <div class="about-badge">
+          <div class="monogram">CMC</div>
+          <div class="name">College Made Clear</div>
+          <div class="role">College counseling, financial aid strategy, and admissions clarity for families who want real answers.</div>
+        </div>
+      </div>
+      <div class="about-content">
+        <h2>Built by someone who has seen every side of this process</h2>
+        <p>College Made Clear was created by a college counselor with seven years of direct student experience, an institutional research background at a major West Coast university, and deep expertise in California homeschool-to-college pathways.</p>
+        <p>This tracker came out of watching families spend hours building spreadsheets from scratch — and getting the structure wrong because they didn't know what to track or how to think about list balance. It's built to solve that specific problem.</p>
+        <p>The goal of everything at College Made Clear is the same: give families the clarity and strategy they need to make good decisions, without the panic.</p>
+        <div class="cred-list">
+          <div class="cred"><div class="cred-dot"></div>7 years as an independent study college counselor</div>
+          <div class="cred"><div class="cred-dot"></div>Institutional researcher, West Coast university</div>
+          <div class="cred"><div class="cred-dot"></div>Homeschool-to-college expert — cited in <em>College Essay Guy</em></div>
+          <div class="cred"><div class="cred-dot"></div>California homeschool Facebook community, 6,000+ families</div>
+          <div class="cred"><div class="cred-dot"></div>NACAC and WACAC conference attendee</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ── -->
+<section class="cta-section">
+  <div class="price-tag">One-time purchase · Instant Google Sheets delivery</div>
+  <h2>Ready to build a smarter college list?</h2>
+  <p>Get the full tracker with 1,800+ schools pre-loaded, smart search, live dashboard, and a built-in strategy guide.</p>
+  <a href="YOUR_ETSY_LINK_HERE" class="btn-primary">
+    Get the Tracker on Etsy ➜
+  </a>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>© 2025 College Made Clear &nbsp;·&nbsp; <a href="https://collegemadeclear.com">collegemadeclear.com</a> &nbsp;·&nbsp; Data: U.S. Department of Education College Scorecard</p>
+  <p style="margin-top:6px;">Tuition and admissions data reflects the most recently available federal reporting year and is subject to change.</p>
+</footer>
+
+<script>
+// ── COLLEGE DATABASE (60 well-known schools with real data) ──
+const COLLEGES = [
+  // Name, State, Type, Size, Setting, Accept%, InState, OOS, GradRate
+  ["University of California-Los Angeles",         "CA","Public","Very Large (20,000+)","City: Large",   0.09, 13398, 43473, 0.92],
+  ["University of California-Berkeley",            "CA","Public","Very Large (20,000+)","City: Large",   0.11, 14312, 44066, 0.93],
+  ["University of California-San Diego",           "CA","Public","Very Large (20,000+)","City: Large",   0.24, 13992, 43950, 0.87],
+  ["University of California-Santa Barbara",       "CA","Public","Large (10,000-19,999)","City: Large",  0.26, 13401, 43347, 0.82],
+  ["University of California-Davis",               "CA","Public","Very Large (20,000+)","City: Small",   0.38, 14312, 44066, 0.85],
+  ["University of California-Irvine",              "CA","Public","Very Large (20,000+)","City: Large",   0.21, 13401, 43347, 0.86],
+  ["University of Southern California",            "CA","Private Nonprofit","Very Large (20,000+)","City: Large", 0.11, 64726, 64726, 0.92],
+  ["Stanford University",                          "CA","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.04, 59450, 59450, 0.95],
+  ["California Institute of Technology",           "CA","Private Nonprofit","Small (under 2,000)","City: Large", 0.04, 60864, 60864, 0.93],
+  ["Harvard University",                           "MA","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.03, 59320, 59320, 0.98],
+  ["Yale University",                              "CT","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.05, 62250, 62250, 0.97],
+  ["Princeton University",                         "NJ","Private Nonprofit","Medium (5,000-9,999)","City: Small",0.04, 57410, 57410, 0.97],
+  ["Columbia University in the City of New York",  "NY","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.04, 65524, 65524, 0.96],
+  ["University of Pennsylvania",                   "PA","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.07, 63452, 63452, 0.96],
+  ["Dartmouth College",                            "NH","Private Nonprofit","Medium-Small (2,000-4,999)","Town",0.06,62430,62430,0.96],
+  ["Brown University",                             "RI","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.05,65146,65146,0.95],
+  ["Cornell University",                           "NY","Private Nonprofit","Large (10,000-19,999)","Town",0.10,63200,63200,0.95],
+  ["Massachusetts Institute of Technology",        "MA","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.04,59750,59750,0.95],
+  ["Duke University",                              "NC","Private Nonprofit","Medium (5,000-9,999)","City: Small",0.06,62688,62688,0.95],
+  ["Vanderbilt University",                        "TN","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.07,60348,60348,0.93],
+  ["Rice University",                              "TX","Private Nonprofit","Medium-Small (2,000-4,999)","City: Large",0.08,56610,56610,0.95],
+  ["University of Notre Dame",                     "IN","Private Nonprofit","Medium (5,000-9,999)","City: Small",0.13,60301,60301,0.96],
+  ["Carnegie Mellon University",                   "PA","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.11,60468,60468,0.91],
+  ["Georgetown University",                        "DC","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.13,59784,59784,0.95],
+  ["New York University",                          "NY","Private Nonprofit","Very Large (20,000+)","City: Large",0.12,58168,58168,0.88],
+  ["Boston University",                            "MA","Private Nonprofit","Very Large (20,000+)","City: Large",0.19,60612,60612,0.89],
+  ["Northeastern University",                      "MA","Private Nonprofit","Large (10,000-19,999)","City: Large",0.07,60192,60192,0.91],
+  ["Tufts University",                             "MA","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.11,65222,65222,0.93],
+  ["Emory University",                             "GA","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.17,58924,58924,0.91],
+  ["Wake Forest University",                       "NC","Private Nonprofit","Medium-Small (2,000-4,999)","City: Small",0.24,62228,62228,0.90],
+  ["University of Michigan-Ann Arbor",             "MI","Public","Very Large (20,000+)","City: Small",0.18,16736,55334,0.92],
+  ["University of Virginia-Main Campus",           "VA","Public","Large (10,000-19,999)","City: Small",0.19,20342,56268,0.95],
+  ["University of North Carolina at Chapel Hill",  "NC","Public","Large (10,000-19,999)","City: Small",0.19,9198,36754,0.92],
+  ["University of Wisconsin-Madison",              "WI","Public","Very Large (20,000+)","City: Small",0.49,11205,37785,0.89],
+  ["University of Illinois Urbana-Champaign",      "IL","Public","Very Large (20,000+)","City: Small",0.44,16862,34318,0.85],
+  ["Pennsylvania State University-Main Campus",    "PA","Public","Very Large (20,000+)","City: Small",0.54,18996,38660,0.83],
+  ["Ohio State University-Main Campus",            "OH","Public","Very Large (20,000+)","City: Large",0.53,12485,33520,0.88],
+  ["University of Washington-Seattle Campus",      "WA","Public","Very Large (20,000+)","City: Large",0.48,12643,41997,0.84],
+  ["University of Florida",                        "FL","Public","Very Large (20,000+)","City: Small",0.24,6381,28658,0.90],
+  ["University of Texas at Austin",                "TX","Public","Very Large (20,000+)","City: Large",0.29,11698,40000,0.84],
+  ["Georgia Institute of Technology-Main Campus",  "GA","Public","Large (10,000-19,999)","City: Large",0.17,12892,33794,0.91],
+  ["University of Alabama at Birmingham",          "AL","Public","Large (10,000-19,999)","City: Large",0.75,8832,22260,0.52],
+  ["The University of Alabama",                    "AL","Public","Very Large (20,000+)","City: Small",0.80,11100,30250,0.70],
+  ["University of Alabama in Huntsville",          "AL","Public","Medium (5,000-9,999)","City: Large",0.71,10534,23562,0.48],
+  ["University of North Alabama",                  "AL","Public","Medium (5,000-9,999)","City: Small",0.72,9450,19000,0.43],
+  ["Pomona College",                               "CA","Private Nonprofit","Small (under 2,000)","City: Large",0.07,59208,59208,0.96],
+  ["Claremont McKenna College",                    "CA","Private Nonprofit","Small (under 2,000)","City: Large",0.10,60710,60710,0.94],
+  ["Harvey Mudd College",                          "CA","Private Nonprofit","Small (under 2,000)","City: Large",0.11,62231,62231,0.95],
+  ["Williams College",                             "MA","Private Nonprofit","Small (under 2,000)","Town",0.08,61770,61770,0.96],
+  ["Amherst College",                              "MA","Private Nonprofit","Small (under 2,000)","Town",0.07,63590,63590,0.96],
+  ["Swarthmore College",                           "PA","Private Nonprofit","Small (under 2,000)","City: Large",0.07,60564,60564,0.95],
+  ["Wellesley College",                            "MA","Private Nonprofit","Small (under 2,000)","City: Large",0.16,59581,59581,0.94],
+  ["Middlebury College",                           "VT","Private Nonprofit","Small (under 2,000)","Town",0.17,62390,62390,0.93],
+  ["Bowdoin College",                              "ME","Private Nonprofit","Small (under 2,000)","Town",0.09,60590,60590,0.95],
+  ["Colby College",                                "ME","Private Nonprofit","Small (under 2,000)","Town",0.12,60910,60910,0.93],
+  ["Wesleyan University",                          "CT","Private Nonprofit","Small (under 2,000)","City: Small",0.16,62574,62574,0.93],
+  ["Loyola Marymount University",                  "CA","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.44,58490,58490,0.82],
+  ["Santa Clara University",                       "CA","Private Nonprofit","Medium (5,000-9,999)","City: Large",0.49,58812,58812,0.87],
+  ["Pepperdine University",                        "CA","Private Nonprofit","Medium-Small (2,000-4,999)","City: Large",0.37,63020,63020,0.83],
+  ["San Diego State University",                   "CA","Public","Very Large (20,000+)","City: Large",0.37,7876,20036,0.72],
+];
+
+// ── ABBREVIATION MAP ──
+const ABBREV = {
+  "ucla":          "University of California-Los Angeles",
+  "uc la":         "University of California-Los Angeles",
+  "ucb":           "University of California-Berkeley",
+  "uc berkeley":   "University of California-Berkeley",
+  "berkeley":      "University of California-Berkeley",
+  "ucsd":          "University of California-San Diego",
+  "uc san diego":  "University of California-San Diego",
+  "ucsb":          "University of California-Santa Barbara",
+  "ucd":           "University of California-Davis",
+  "uc davis":      "University of California-Davis",
+  "uci":           "University of California-Irvine",
+  "uc irvine":     "University of California-Irvine",
+  "usc":           "University of Southern California",
+  "southern cal":  "University of Southern California",
+  "stanford":      "Stanford University",
+  "caltech":       "California Institute of Technology",
+  "harvard":       "Harvard University",
+  "yale":          "Yale University",
+  "princeton":     "Princeton University",
+  "columbia":      "Columbia University in the City of New York",
+  "penn":          "University of Pennsylvania",
+  "upenn":         "University of Pennsylvania",
+  "dartmouth":     "Dartmouth College",
+  "brown":         "Brown University",
+  "cornell":       "Cornell University",
+  "mit":           "Massachusetts Institute of Technology",
+  "duke":          "Duke University",
+  "vanderbilt":    "Vanderbilt University",
+  "vandy":         "Vanderbilt University",
+  "rice":          "Rice University",
+  "notre dame":    "University of Notre Dame",
+  "cmu":           "Carnegie Mellon University",
+  "carnegie mellon":"Carnegie Mellon University",
+  "georgetown":    "Georgetown University",
+  "nyu":           "New York University",
+  "bu":            "Boston University",
+  "boston u":      "Boston University",
+  "northeastern":  "Northeastern University",
+  "tufts":         "Tufts University",
+  "emory":         "Emory University",
+  "wake forest":   "Wake Forest University",
+  "umich":         "University of Michigan-Ann Arbor",
+  "michigan":      "University of Michigan-Ann Arbor",
+  "uva":           "University of Virginia-Main Campus",
+  "virginia":      "University of Virginia-Main Campus",
+  "unc":           "University of North Carolina at Chapel Hill",
+  "chapel hill":   "University of North Carolina at Chapel Hill",
+  "uw madison":    "University of Wisconsin-Madison",
+  "uiuc":          "University of Illinois Urbana-Champaign",
+  "illinois":      "University of Illinois Urbana-Champaign",
+  "psu":           "Pennsylvania State University-Main Campus",
+  "penn state":    "Pennsylvania State University-Main Campus",
+  "osu":           "Ohio State University-Main Campus",
+  "ohio state":    "Ohio State University-Main Campus",
+  "uw":            "University of Washington-Seattle Campus",
+  "uf":            "University of Florida",
+  "ut austin":     "University of Texas at Austin",
+  "texas austin":  "University of Texas at Austin",
+  "georgia tech":  "Georgia Institute of Technology-Main Campus",
+  "gatech":        "Georgia Institute of Technology-Main Campus",
+  "uab":           "University of Alabama at Birmingham",
+  "alabama birmingham": "University of Alabama at Birmingham",
+  "pomona":        "Pomona College",
+  "cmc":           "Claremont McKenna College",
+  "harvey mudd":   "Harvey Mudd College",
+  "williams":      "Williams College",
+  "amherst":       "Amherst College",
+  "swarthmore":    "Swarthmore College",
+  "wellesley":     "Wellesley College",
+  "middlebury":    "Middlebury College",
+  "bowdoin":       "Bowdoin College",
+  "colby":         "Colby College",
+  "wesleyan":      "Wesleyan University",
+  "lmu":           "Loyola Marymount University",
+  "loyola marymount":"Loyola Marymount University",
+  "santa clara":   "Santa Clara University",
+  "pepperdine":    "Pepperdine University",
+  "sdsu":          "San Diego State University",
+  "san diego state":"San Diego State University",
+};
+
+const FILLER = {"the":1,"of":1,"at":1,"in":1,"a":1,"an":1,"and":1,"for":1,"university":1};
+
+function normalize(s) {
+  return s.toLowerCase().replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+}
+function normalizeStrict(s) {
+  return normalize(s).split(' ').filter(w => w.length > 1 && !FILLER[w]).join(' ');
+}
+function scoreMatch(query, candidateName) {
+  const q  = normalize(query);
+  const c  = normalize(candidateName);
+  const qs = normalizeStrict(query);
+  const cs = normalizeStrict(candidateName);
+  if (q === c || (qs === cs && qs.length > 0)) return 100;
+  if (c.includes(q)) return 92;
+  if (cs.includes(qs) && qs.length > 2) return 92;
+  const qw = qs.split(' ').filter(w => w.length > 1);
+  const allFound = qw.every(w => cs.includes(w));
+  if (allFound && qw.length >= 2) {
+    const extras = cs.split(' ').filter(w => w.length > 1 && !qw.includes(w)).length;
+    return extras <= 2 ? 88 : 78;
+  }
+  const found = qw.filter(w => cs.includes(w)).length;
+  if (qw.length >= 3 && found >= qw.length - 1) return 62;
+  if (found >= 1) return 30;
+  return 0;
+}
+
+// ── SAMPLE DATA for pre-filled rows ──
+const SAMPLE_ROWS = [
+  { name:"Stanford University",         level:"High Reach" },
+  { name:"University of Notre Dame",    level:"Reach" },
+  { name:"University of Wisconsin-Madison", level:"Target" },
+  { name:"San Diego State University",  level:"Likely" },
+  { name:"University of Alabama at Birmingham", level:"Highly Likely" },
+];
+
+// ── RENDER TABLE ──
+// Array indices: [0]name [1]state [2]type [3]size [4]setting [5]accept [6]inState [7]OOS [8]gradRate
+const COL = { name:0, state:1, type:2, size:3, setting:4, accept:5, instate:6, oos:7, grad:8 };
+
+function fmt(val, type) {
+  if (val === null || val === undefined || val === '') return '<span style="color:#bbb">—</span>';
+  if (type === 'pct') return Math.round(val * 100) + '%';
+  if (type === 'usd') return '$' + Number(val).toLocaleString();
+  return val;
+}
+
+const LEVELS = ["High Reach","Reach","Target","Likely","Highly Likely"];
+const LEVEL_CLASS = {
+  "High Reach":"badge-high-reach","Reach":"badge-reach",
+  "Target":"badge-target","Likely":"badge-likely","Highly Likely":"badge-high-likely"
+};
+
+function levelDropdown(selected, rowId) {
+  const opts = LEVELS.map(l =>
+    `<option value="${l}" ${l===selected?'selected':''}>${l}</option>`
+  ).join('');
+  return `<select class="level-select" id="level-${rowId}" onchange="updateLevelBadge(${rowId})"
+    style="font-family:'DM Sans',sans-serif;font-size:11px;padding:3px 6px;border-radius:5px;
+    border:1px solid var(--border);background:var(--purple-tint);color:var(--purple-dark);
+    font-weight:600;cursor:pointer;width:100%">${opts}</select>`;
+}
+
+function updateLevelBadge(rowId) {
+  const sel = document.getElementById('level-' + rowId);
+  const val = sel.value;
+  sel.className = 'level-select';
+  const bg = {
+    "High Reach": "var(--high-reach-bg)", "Reach": "var(--reach-bg)",
+    "Target": "var(--target-bg)", "Likely": "var(--likely-bg)",
+    "Highly Likely": "var(--high-likely-bg)"
+  }[val] || '';
+  const fc = {
+    "High Reach": "var(--high-reach-text)", "Reach": "var(--reach-text)",
+    "Target": "var(--target-text)", "Likely": "var(--likely-text)",
+    "Highly Likely": "var(--high-likely-text)"
+  }[val] || '';
+  sel.style.background = bg;
+  sel.style.color = fc;
+}
+
+function buildRows() {
+  const tbody = document.getElementById('demoTableBody');
+  let html = '';
+  // Pre-filled sample rows — each has a working level dropdown
+  SAMPLE_ROWS.forEach((s, i) => {
+    const c = COLLEGES.find(col => col[COL.name] === s.name);
+    if (c) {
+      html += `<tr>
+        <td class="col-name">${c[COL.name]}</td>
+        <td class="level-cell">${levelDropdown(s.level, i)}</td>
+        <td class="autofill">${c[COL.state]}</td>
+        <td class="autofill">${c[COL.type]}</td>
+        <td class="autofill" style="font-size:10px;white-space:normal;min-width:100px">${c[COL.size]}</td>
+        <td class="autofill">${c[COL.setting]}</td>
+        <td class="autofill">${fmt(c[COL.accept],'pct')}</td>
+        <td class="autofill">${fmt(c[COL.instate],'usd')}</td>
+        <td class="autofill">${fmt(c[COL.oos],'usd')}</td>
+        <td class="autofill">${fmt(c[COL.grad],'pct')}</td>
+      </tr>`;
+    }
+  });
+  // Input row — level dropdown starts blank
+  html += `<tr class="input-row" id="inputRow">
+    <td class="col-name" id="inputCell" style="color:var(--grey-mid);font-style:italic;font-weight:400;">
+      Type above to search<span class="cursor"></span>
+    </td>
+    <td class="level-cell">${levelDropdown('Target', 99)}</td>
+    <td id="af-state"></td>
+    <td id="af-type"></td>
+    <td id="af-size"></td>
+    <td id="af-setting"></td>
+    <td id="af-accept"></td>
+    <td id="af-instate"></td>
+    <td id="af-oos"></td>
+    <td id="af-grad"></td>
+  </tr>`;
+  // Empty rows
+  for (let i = 0; i < 4; i++) {
+    html += `<tr>
+      <td class="col-name empty">—</td>
+      <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>`;
+  }
+  tbody.innerHTML = html;
+  // Apply initial colors to all dropdowns
+  SAMPLE_ROWS.forEach((s, i) => updateLevelBadge(i));
+  updateLevelBadge(99);
+}
+
+// ── SEARCH LOGIC ──
+let debounceTimer;
+document.getElementById('demoInput').addEventListener('input', function() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => runSearch(this.value), 280);
+});
+
+function runSearch(raw) {
+  const input = raw.trim();
+  const msgEl = document.getElementById('resultMsg');
+  const inputCell = document.getElementById('inputCell');
+
+  if (!input) {
+    msgEl.textContent = '';
+    clearAutofill();
+    inputCell.innerHTML = 'Type above to search<span class="cursor"></span>';
+    inputCell.style.color = 'var(--grey-mid)';
+    inputCell.style.fontStyle = 'italic';
+    return;
+  }
+
+  // Check abbreviation map
+  const abbrev = ABBREV[input.toLowerCase()];
+  let result = null;
+  if (abbrev) {
+    result = COLLEGES.find(c => c[0] === abbrev);
+  }
+
+  if (!result) {
+    // Score all candidates
+    const scored = COLLEGES.map(c => ({ college: c, score: scoreMatch(input, c[0]) }))
+      .filter(s => s.score >= 25)
+      .sort((a, b) => b.score - a.score);
+
+    if (scored.length === 0) {
+      msgEl.className = 'demo-result-msg msg-none';
+      msgEl.textContent = 'No match found — try a different spelling or abbreviation (e.g. UCLA, Penn State, Emory)';
+      clearAutofill();
+      inputCell.innerHTML = input + '<span class="cursor"></span>';
+      inputCell.style.color = 'var(--orange)';
+      inputCell.style.fontStyle = 'italic';
+      return;
+    }
+
+    const best = scored[0];
+    const second = scored[1];
+    const isAmbiguous = second && best.score < 88 && (best.score - second.score) <= 12;
+
+    if (isAmbiguous) {
+      const suggestions = scored
+        .filter(s => best.score - s.score <= 12)
+        .slice(0, 4)
+        .map(s => s.college[0]);
+      msgEl.className = 'demo-result-msg msg-suggest';
+      msgEl.textContent = 'Did you mean: ' + suggestions.join(' | ') + ' — type more to narrow down';
+      clearAutofill();
+      inputCell.innerHTML = input + '<span class="cursor"></span>';
+      inputCell.style.color = 'var(--amber)';
+      inputCell.style.fontStyle = 'italic';
+      return;
+    }
+
+    result = best.college;
+  }
+
+  // Found a confident match
+  fillAutofill(result);
+  inputCell.textContent = result[0];
+  inputCell.style.color = 'var(--purple-dark)';
+  inputCell.style.fontStyle = 'normal';
+  inputCell.style.fontWeight = '600';
+  msgEl.className = 'demo-result-msg msg-found';
+  msgEl.textContent = '✓ Found: ' + result[0] + (result[0] !== raw.trim() ? ' (matched from "' + raw.trim() + '")' : '');
+}
+
+function fillAutofill(c) {
+  document.getElementById('af-state').textContent   = c[COL.state];
+  document.getElementById('af-type').textContent    = c[COL.type];
+  document.getElementById('af-size').textContent    = c[COL.size];
+  document.getElementById('af-setting').textContent = c[COL.setting];
+  document.getElementById('af-accept').textContent  = Math.round(c[COL.accept] * 100) + '%';
+  document.getElementById('af-instate').textContent = '$' + Number(c[COL.instate]).toLocaleString();
+  document.getElementById('af-oos').textContent     = '$' + Number(c[COL.oos]).toLocaleString();
+  document.getElementById('af-grad').textContent    = Math.round(c[COL.grad] * 100) + '%';
+  ['af-state','af-type','af-size','af-setting','af-accept','af-instate','af-oos','af-grad']
+    .forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.add('autofill');
+      el.style.color = 'var(--grey-dark)';
+      el.style.fontStyle = 'normal';
+    });
+}
+
+function clearAutofill() {
+  ['af-state','af-type','af-size','af-setting','af-accept','af-instate','af-oos','af-grad']
+    .forEach(id => {
+      const el = document.getElementById(id);
+      el.textContent = '';
+      el.classList.remove('autofill');
+    });
+}
+
+// ── INIT ──
+buildRows();
+</script>
+</body>
+</html>
